@@ -1,7 +1,7 @@
 CIF Syntax File For gVim
 ==============
 
-A gvim syntax highlighting for CIF timetable files.
+A gVim syntax highlighting for CIF timetable files.
 
 ![](CIFVimSyntax.png)
 
