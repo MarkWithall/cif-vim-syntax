@@ -1,4 +1,4 @@
-cif-vim-syntax
+CIF Syntax File For GVIM
 ==============
 
 A gvim syntax highlighting for CIF timetable files.
