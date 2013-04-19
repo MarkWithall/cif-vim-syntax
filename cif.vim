@@ -8,6 +8,31 @@ if exists("b:current_syntax")
     finish
 endif
 
+" Header
+syn match cifHdRecordIdentity "^HD" nextgroup=cifHdFileMainframeIdentity
+syn match cifHdFileMainframeIdentity "...................." contained nextgroup=cifHdDateOfExtract
+syn match cifHdDateOfExtract "......" contained nextgroup=cifHdTimeOfExtract
+syn match cifHdTimeOfExtract "...." contained nextgroup=cifHdCurrentFileRef
+syn match cifHdCurrentFileRef "......." contained nextgroup=cifHdLastFileRef
+syn match cifHdLastFileRef "......." contained nextgroup=cifHdBleedOffUpdateInd
+syn match cifHdBleedOffUpdateInd "." contained nextgroup=cifHdVersion
+syn match cifHdVersion "." contained nextgroup=cifHdUserExtractStartDate
+syn match cifHdUserExtractStartDate "......" contained nextgroup=cifHdUserExtractEndDate
+syn match cifHdUserExtractEndDate "......" contained nextgroup=cifHdSpare
+syn match cifHdSpare "...................." contained
+
+hi link cifHdRecordIdentity odd
+hi link cifHdFileMainframeIdentity even
+hi link cifHdDateOfExtract odd
+hi link cifHdTimeOfExtract even
+hi link cifHdCurrentFileRef odd
+hi link cifHdLastFileRef even
+hi link cifHdBleedOffUpdateInd odd
+hi link cifHdVersion even
+hi link cifHdUserExtractStartDate odd
+hi link cifHdUserExtractEndDate even
+hi link cifHdSpare odd
+
 " Basic Schedule
 syn match cifBsRecordIdentity "^BS" nextgroup=cifBsTransactionType
 syn match cifBsTransactionType "." contained nextgroup=cifBsTrainUid
@@ -205,6 +230,127 @@ hi link cifLtPlatform ltOdd
 hi link cifLtPath ltEven
 hi link cifLtActivity ltOdd
 hi link cifLtSpare ltEven
+
+" Train Specific Note
+syn match cifTnRecordIdentity "^TN" nextgroup=cifTnNoteType
+syn match cifTnNoteType "." contained nextgroup=cifTnNote
+syn match cifTnNote "............................................................................." contained
+
+hi link cifTnRecordIdentity odd
+hi link cifTnNoteType even
+hi link cifTnNote odd
+
+" Location Specific Note
+syn match cifLnRecordIdentity "^LN" nextgroup=cifLnNoteType
+syn match cifLnNoteType "." contained nextgroup=cifLnNote
+syn match cifLnNote "............................................................................." contained
+
+hi link cifLnRecordIdentity odd
+hi link cifLnNoteType even
+hi link cifLnNote odd
+
+" Association
+syn match cifAaRecordIdentity "^AA" nextgroup=cifAaTransactionType
+syn match cifAaTransactionType "." contained nextgroup=cifAaMainTrainUid
+syn match cifAaMainTrainUid "......" contained nextgroup=cifAaAssociatedTrainUid
+syn match cifAaAssociatedTrainUid "......" contained nextgroup=cifAaAssociationStartDate
+syn match cifAaAssociationStartDate "......" contained nextgroup=cifAaAssociationEndDate
+syn match cifAaAssociationEndDate "......" contained nextgroup=cifAaAssociationDays
+syn match cifAaAssociationDays "......." contained nextgroup=cifAaAssociationCategory
+syn match cifAaAssociationCategory ".." contained nextgroup=cifAaAssociationDateInd
+syn match cifAaAssociationDateInd "." contained nextgroup=cifAaAssociationLocation
+syn match cifAaAssociationLocation "......." contained nextgroup=cifAaBaseLocationSuffix
+syn match cifAaBaseLocationSuffix "." contained nextgroup=cifAaAssocLocationSuffix
+syn match cifAaAssocLocationSuffix "." contained nextgroup=cifAaDiagramType
+syn match cifAaDiagramType "." contained nextgroup=cifAaAssociationType
+syn match cifAaAssociationType "." contained nextgroup=cifAaSpare
+syn match cifAaSpare "..............................." contained nextgroup=cifAaStpIndicator
+syn match cifAaStpIndicator "." contained
+
+hi link cifAaRecordIdentity odd
+hi link cifAaTransactionType even
+hi link cifAaMainTrainUid odd
+hi link cifAaAssociatedTrainUid even
+hi link cifAaAssociationStartDate odd
+hi link cifAaAssociationEndDate even
+hi link cifAaAssociationDays odd
+hi link cifAaAssociationCategory even
+hi link cifAaAssociationDateInd odd
+hi link cifAaAssociationLocation even
+hi link cifAaBaseLocationSuffix odd
+hi link cifAaAssocLocationSuffix even
+hi link cifAaDiagramType odd
+hi link cifAaAssociationType even
+hi link cifAaSpare odd
+hi link cifAaStpIndicator even
+
+" Tiploc Insert
+syn match cifTiRecordIdentity "^TI" nextgroup=cifTiTiplocCode
+syn match cifTiTiplocCode "......." contained nextgroup=cifTiCapitalsIdentification
+syn match cifTiCapitalsIdentification ".." contained nextgroup=cifTiNalco
+syn match cifTiNalco "......" contained nextgroup=cifTiNlcCheckCharacter
+syn match cifTiNlcCheckCharacter "." contained nextgroup=cifTiTpsDescription
+syn match cifTiTpsDescription ".........................." contained nextgroup=cifTiStanox
+syn match cifTiStanox "....." contained nextgroup=cifTiPoMcpCode
+syn match cifTiPoMcpCode "...." contained nextgroup=cifTiCrsCode
+syn match cifTiCrsCode "..." contained nextgroup=cifTiSixteenCharacterDescription
+syn match cifTiSixteenCharacterDescription "................" contained nextgroup=cifTiSpare
+syn match cifTiSpare "........" contained
+
+hi link cifTiRecordIdentity odd
+hi link cifTiTiplocCode even
+hi link cifTiCapitalsIdentification odd
+hi link cifTiNalco even
+hi link cifTiNlcCheckCharacter odd
+hi link cifTiTpsDescription even
+hi link cifTiStanox odd
+hi link cifTiPoMcpCode even
+hi link cifTiCrsCode odd
+hi link cifTiSixteenCharacterDescription even
+hi link cifTiSpare odd
+
+" Tiploc Amend
+syn match cifTaRecordIdentity "^TA" nextgroup=cifTaTiplocCode
+syn match cifTaTiplocCode "......." contained nextgroup=cifTaCapitalsIdentification
+syn match cifTaCapitalsIdentification ".." contained nextgroup=cifTaNalco
+syn match cifTaNalco "......" contained nextgroup=cifTaNlcCheckCharacter
+syn match cifTaNlcCheckCharacter "." contained nextgroup=cifTaTpsDescription
+syn match cifTaTpsDescription ".........................." contained nextgroup=cifTaStanox
+syn match cifTaStanox "....." contained nextgroup=cifTaPoMcpCode
+syn match cifTaPoMcpCode "...." contained nextgroup=cifTaCrsCode
+syn match cifTaCrsCode "..." contained nextgroup=cifTaSixteenCharacterDescription
+syn match cifTaSixteenCharacterDescription "................" contained nextgroup=cifTaNewTiploc
+syn match cifTaNewTiploc "......." contained nextgroup=cifTaSpare
+syn match cifTaSpare "." contained
+
+hi link cifTaRecordIdentity odd
+hi link cifTaTiplocCode even
+hi link cifTaCapitalsIdentification odd
+hi link cifTaNalco even
+hi link cifTaNlcCheckCharacter odd
+hi link cifTaTpsDescription even
+hi link cifTaStanox odd
+hi link cifTaPoMcpCode even
+hi link cifTaCrsCode odd
+hi link cifTaSixteenCharacterDescription even
+hi link cifTaNewTiploc odd
+hi link cifTaSpare even
+
+" Tiploc Delete
+syn match cifTdRecordIdentity "^TD" nextgroup=cifTdTiplocCode
+syn match cifTdTiplocCode "......." contained nextgroup=cifTdSpare
+syn match cifTdSpare "......................................................................." contained
+
+hi link cifTdRecordIdentity odd
+hi link cifTdTiplocCode even
+hi link cifTdSpare odd
+
+" Trailer
+syn match cifZzRecordIdentity "^ZZ" nextgroup=cifZzSpare
+syn match cifZzSpare ".............................................................................." contained
+
+hi link cifZzRecordIdentity odd
+hi link cifZzSpare even
 
 " Colouring
 hi odd      guibg=#EEEEEE

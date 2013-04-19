@@ -120,7 +120,19 @@ let b:current_syntax = "cif"
 VIM
 
 __DATA__
-bs,bx,lo,li,cr,lt
+hd,bs,bx,lo,li,cr,lt,tn,ln,aa,ti,ta,td,zz
+
+hd,Header,
+FileMainframeIdentity   20
+DateOfExtract           6
+TimeOfExtract           4
+CurrentFileRef          7
+LastFileRef             7
+BleedOffUpdateInd       1
+Version                 1
+UserExtractStartDate    6
+UserExtractEndDate      6
+Spare                   20
 
 bs,Basic Schedule,bs
 TransactionType              1
@@ -217,4 +229,61 @@ Platform             3
 Path                 3
 Activity             12
 Spare                43
+
+tn,Train Specific Note,
+NoteType    1
+Note        77
+
+ln,Location Specific Note,
+NoteType    1
+Note        77
+
+aa,Association,
+TransactionType         1
+MainTrainUid            6
+AssociatedTrainUid      6
+AssociationStartDate    6
+AssociationEndDate      6
+AssociationDays         7
+AssociationCategory     2
+AssociationDateInd      1
+AssociationLocation     7
+BaseLocationSuffix      1
+AssocLocationSuffix     1
+DiagramType             1
+AssociationType         1
+Spare                   31
+StpIndicator            1
+
+ti,Tiploc Insert,
+TiplocCode                  7
+CapitalsIdentification      2
+Nalco                       6
+NlcCheckCharacter           1
+TpsDescription              26
+Stanox                      5
+PoMcpCode                   4
+CrsCode                     3
+SixteenCharacterDescription 16
+Spare                       8
+
+ta,Tiploc Amend,
+TiplocCode                  7
+CapitalsIdentification      2
+Nalco                       6
+NlcCheckCharacter           1
+TpsDescription              26
+Stanox                      5
+PoMcpCode                   4
+CrsCode                     3
+SixteenCharacterDescription 16
+NewTiploc                   7
+Spare                       1
+
+td,Tiploc Delete,
+TiplocCode  7
+Spare       71
+
+zz,Trailer,
+Spare   78
 
