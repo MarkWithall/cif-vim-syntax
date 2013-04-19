@@ -8,28 +8,27 @@ use List::Util 'sum';
 sub create_section {
     my ($name, $record_identity, $fields, $highligh_prefix) = @_;
     print "\" $name\n";
-    create_syntax($record_identity, [map {$_->{name}} @$fields], [map {$_->{size}} @$fields]);
-    create_links($record_identity, [map {$_->{name}} @$fields], $highligh_prefix);
+    create_syntax($record_identity, $fields);
+    create_links($record_identity, $fields, $highligh_prefix);
 }
 
 sub create_syntax {
-    my ($identity, $names, $lengths) = @_;
-    croak "Must have same number of record names as lengths" if ($#$names != $#$lengths);
-    croak "Sum of field lengths must be 78" if (sum(@$lengths) != 78);
-    syn_match(element($identity, 'RecordIdentity'), '^' . uc($identity), element($identity, $$names[0]), 0);
-    for my $i (0 .. $#$names) {
-        my $next = ($i < $#$names) ? element($identity, $$names[$i+1]) : '';
-        syn_match(element($identity, $$names[$i]), '.'x$$lengths[$i], $next, 1);
+    my ($identity, $fields) = @_;
+    croak "Sum of field lengths must be 78" if (sum(map {$_->{size}} @$fields) != 78);
+    syn_match(element($identity, 'RecordIdentity'), '^' . uc($identity), element($identity, $$fields[0]{name}), 0);
+    for my $i (0 .. $#$fields) {
+        my $next = ($i < $#$fields) ? element($identity, $$fields[$i+1]{name}) : '';
+        syn_match(element($identity, $$fields[$i]{name}), '.'x$$fields[$i]{size}, $next, 1);
     }
     print "\n";
 }
 
 sub create_links {
-    my ($identity, $names, $prefix) = @_;
+    my ($identity, $fields, $prefix) = @_;
     hi_link(element($identity, 'RecordIdentity'), highlight($prefix, 'odd'));
     my $odd_even = 'even';
-    for my $i (0 .. $#$names) {
-        hi_link(element($identity, $$names[$i]), highlight($prefix, $odd_even));
+    for my $i (0 .. $#$fields) {
+        hi_link(element($identity, $$fields[$i]{name}), highlight($prefix, $odd_even));
         $odd_even = $odd_even eq 'odd' ? 'even' : 'odd';
     }
     print "\n";
