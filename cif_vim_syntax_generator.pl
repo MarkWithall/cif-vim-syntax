@@ -6,29 +6,29 @@ use Carp;
 use List::Util 'sum';
 
 sub create_section {
-    my ($name, $record_identity, $fields, $highligh_prefix) = @_;
+    my ($name, $id, $fields, $prefix) = @_;
     print "\" $name\n";
-    create_syntax($record_identity, $fields);
-    create_links($record_identity, $fields, $highligh_prefix);
+    create_syntax($id, $fields);
+    create_links($id, $fields, $prefix);
 }
 
 sub create_syntax {
-    my ($identity, $fields) = @_;
+    my ($id, $fields) = @_;
     croak "Sum of field lengths must be 78" if (sum(map {$_->{size}} @$fields) != 78);
-    syn_match(element($identity, 'RecordIdentity'), '^' . uc($identity), element($identity, $$fields[0]{name}), 0);
+    syn_match(element($id, 'RecordIdentity'), '^' . uc($id), element($id, $$fields[0]{name}), 0);
     for my $i (0 .. $#$fields) {
-        my $next = ($i < $#$fields) ? element($identity, $$fields[$i+1]{name}) : '';
-        syn_match(element($identity, $$fields[$i]{name}), '.'x$$fields[$i]{size}, $next, 1);
+        my $next = ($i < $#$fields) ? element($id, $$fields[$i+1]{name}) : '';
+        syn_match(element($id, $$fields[$i]{name}), '.'x$$fields[$i]{size}, $next, 1);
     }
     print "\n";
 }
 
 sub create_links {
-    my ($identity, $fields, $prefix) = @_;
-    hi_link(element($identity, 'RecordIdentity'), highlight($prefix, 'odd'));
+    my ($id, $fields, $prefix) = @_;
+    hi_link(element($id, 'RecordIdentity'), highlight($prefix, 'odd'));
     my $odd_even = 'even';
     for my $i (0 .. $#$fields) {
-        hi_link(element($identity, $$fields[$i]{name}), highlight($prefix, $odd_even));
+        hi_link(element($id, $$fields[$i]{name}), highlight($prefix, $odd_even));
         $odd_even = $odd_even eq 'odd' ? 'even' : 'odd';
     }
     print "\n";
@@ -48,8 +48,8 @@ sub hi_link {
 }
 
 sub element {
-    my ($record_identity, $field) = @_;
-    return 'cif' . ucfirst($record_identity) . $field;
+    my ($id, $field) = @_;
+    return 'cif' . ucfirst($id) . $field;
 }
 
 sub highlight {
