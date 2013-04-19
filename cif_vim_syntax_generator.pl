@@ -6,35 +6,47 @@ use Carp;
 
 sub create_section {
     my ($name, $record_identity, $names, $lengths, $highligh_prefix) = @_;
-    println('" ' . $name);
+    print "\" $name\n";
     create_syntax($record_identity, $names, $lengths);
     create_links($record_identity, $names, $highligh_prefix);
 }
 
 sub create_syntax {
-    my ($record_identity, $names, $lengths) = @_;
+    my ($identity, $names, $lengths) = @_;
     croak "Must have same number of record names as lengths" if ($#$names != $#$lengths);
-    print 'syn match ' . element_name($record_identity, 'RecordIdentity') . ' "^' . uc($record_identity) . '" nextgroup=' . element_name($record_identity, $$names[0]) . "\n";
+    syn_match(element($identity, 'RecordIdentity'), '^' . uc($identity), element($identity, $$names[0]), 0);
     for my $i (0 .. $#$names) {
-        print 'syn match ' . element_name($record_identity, $$names[$i]) . ' "' . '.'x$$lengths[$i] . '" contained';
-        print ' nextgroup=' . element_name($record_identity, $$names[$i+1]) if ($i < $#$names);
-        print "\n";
+        my $next = ($i < $#$names) ? element($identity, $$names[$i+1]) : '';
+        syn_match(element($identity, $$names[$i]), '.'x$$lengths[$i], $next, 1);
     }
     print "\n";
 }
 
 sub create_links {
-    my ($record_identity, $names, $highlight_prefix) = @_;
-    print 'hi link ' . element_name($record_identity, 'RecordIdentity') . ' ' . highlight($highlight_prefix, 'odd') . "\n";
-    my $oddEven = 'even';
+    my ($identity, $names, $highlight_prefix) = @_;
+    hi_link(element($identity, 'RecordIdentity'), 'odd');
+    my $odd_even = 'even';
     for my $i (0 .. $#$names) {
-        print 'hi link ' . element_name($record_identity, $$names[$i]) . ' ' . highlight($highlight_prefix, $oddEven) . "\n";
-        $oddEven = $oddEven eq 'odd' ? 'even' : 'odd';
+        hi_link($identity, $$names[$i]);
+        $odd_even = $odd_even eq 'odd' ? 'even' : 'odd';
     }
     print "\n";
 }
 
-sub element_name {
+sub syn_match {
+    my ($name, $match, $next, $contained) = @_;
+    print 'syn match ' . $name . ' "' . $match . '"';
+    print ' contained' if ($contained);
+    print ' nextgroup=' . $next if ($next ne '');
+    print "\n";
+}
+
+sub hi_link {
+    my ($name, $odd_even) = @_;
+    print "hi link $name $odd_even\n";
+}
+
+sub element {
     my ($record_identity, $field) = @_;
     return 'cif' . ucfirst($record_identity) . $field;
 }
@@ -42,10 +54,6 @@ sub element_name {
 sub highlight {
     my ($prefix, $oddEven) = @_;
     return ($prefix eq '') ? $oddEven : $prefix . ucfirst($oddEven);
-}
-
-sub println {
-    print "$_[0]\n";
 }
 
 # HEADER
