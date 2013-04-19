@@ -5,6 +5,30 @@ use warnings;
 use Carp;
 use List::Util 'sum';
 
+sub read_ids {
+    my $line = <DATA>;
+    chomp($line);
+    return split(',', $line);
+}
+
+sub read_data {
+    my %data = ();
+    my $id;
+    while (my $line = <DATA>) {
+        next if ($line =~ /^\s*$/);
+        chomp($line);
+        if ($line =~ /^(\w+)\s+(\d+)$/) {
+            push @{$data{$id}{fields}}, {name => $1, size => $2};
+        }
+        elsif ($line =~ /^(\w\w),([^,]+),(\w*)/) {
+            $id = $1;
+            $data{$id}{description} = $2;
+            $data{$id}{prefix} = $3;
+        }
+    }
+    return %data;
+}
+
 sub create_section {
     my ($name, $id, $fields, $prefix) = @_;
     print "\" $name\n";
@@ -71,119 +95,12 @@ endif
 
 VIM
 
-# BS
-my @bs_fields = (
-    {name => 'TransactionType',             size => 1},
-    {name => 'TrainUid',                    size => 6},
-    {name => 'DateRunsFrom',                size => 6},
-    {name => 'DateRunsTo',                  size => 6},
-    {name => 'DaysRun',                     size => 7},
-    {name => 'BankHolidayRunning',          size => 1},
-    {name => 'TrainStatus',                 size => 1},
-    {name => 'TrainCategory',               size => 2},
-    {name => 'TrainIdentity',               size => 4},
-    {name => 'Headcode',                    size => 4},
-    {name => 'CourseIndicator',             size => 1},
-    {name => 'TrainServiceCode',            size => 8},
-    {name => 'PortionId',                   size => 1},
-    {name => 'PowerType',                   size => 3},
-    {name => 'TimingLoad',                  size => 4},
-    {name => 'Speed',                       size => 3},
-    {name => 'OperatingCharacteristics',    size => 6},
-    {name => 'TrainClass',                  size => 1},
-    {name => 'Sleepers',                    size => 1},
-    {name => 'Reservations',                size => 1},
-    {name => 'ConnectionIndicator',         size => 1},
-    {name => 'CateringCode',                size => 4},
-    {name => 'ServiceBranding',             size => 4},
-    {name => 'Spare',                       size => 1},
-    {name => 'StpIndicator',                size => 1},
-);
-create_section('Basic Schedule', 'bs', \@bs_fields, 'bs');
+my @ids = read_ids();
+my %data = read_data();
 
-# BX
-my @bx_fields = (
-    {name => 'TractionClass',               size => 4},
-    {name => 'UicCode',                     size => 5},
-    {name => 'AtocCode',                    size => 2},
-    {name => 'ApplicableTimetableCode',     size => 1},
-    {name => 'ReservedFieldRsid',           size => 8},
-    {name => 'ReservedFieldDataSource',     size => 1},
-    {name => 'Spare',                       size => 57},
-);
-create_section('Basic Schedule Extra Detail', 'bx', \@bx_fields, '');
-
-# LO
-my @lo_fields = (
-    {name => 'Location',                size => 8},
-    {name => 'ScheduledDeparture',      size => 5},
-    {name => 'PublicDeparture',         size => 4},
-    {name => 'Platform',                size => 3},
-    {name => 'Line',                    size => 3},
-    {name => 'EngineeringAllowance',    size => 2},
-    {name => 'PathingAllowance',        size => 2},
-    {name => 'Activity',                size => 12},
-    {name => 'PerformanceAllowance',    size => 2},
-    {name => 'Spare',                   size => 37},
-);
-create_section('Origin Location', 'lo', \@lo_fields, 'lo');
-
-# LI
-my @li_fields = (
-    {name => 'Location',                size => 8},
-    {name => 'ScheduledArrival',        size => 5},
-    {name => 'ScheduledDeparture',      size => 5},
-    {name => 'ScheduledPass',           size => 5},
-    {name => 'PublicArrival',           size => 4},
-    {name => 'PublicDeparture',         size => 4},
-    {name => 'Platform',                size => 3},
-    {name => 'Line',                    size => 3},
-    {name => 'Path',                    size => 3},
-    {name => 'Activity',                size => 12},
-    {name => 'EngineeringAllowance',    size => 2},
-    {name => 'PathingAllowance',        size => 2},
-    {name => 'PerformanceAllowance',    size => 2},
-    {name => 'Spare',                   size => 20},
-);
-create_section('Intermediate Location', 'li', \@li_fields, '');
-
-# CR
-my @cr_fields = (
-    {name => 'Location',                    size => 8},
-    {name => 'TrainCategory',               size => 2},
-    {name => 'TrainIdentity',               size => 4},
-    {name => 'Headcode',                    size => 4},
-    {name => 'CourseIndicator',             size => 1},
-    {name => 'TrainServiceCode',            size => 8},
-    {name => 'PortionId',                   size => 1},
-    {name => 'PowerType',                   size => 3},
-    {name => 'TimingLoad',                  size => 4},
-    {name => 'Speed',                       size => 3},
-    {name => 'OperatingCharacteristics',    size => 6},
-    {name => 'TrainClass',                  size => 1},
-    {name => 'Sleepers',                    size => 1},
-    {name => 'Reservations',                size => 1},
-    {name => 'ConnectionIndicator',         size => 1},
-    {name => 'CateringCode',                size => 4},
-    {name => 'ServiceBranding',             size => 4},
-    {name => 'TractionClass',               size => 4},
-    {name => 'UicCode',                     size => 5},
-    {name => 'ReservedFieldRsid',           size => 8},
-    {name => 'Spare',                       size => 5},
-);
-create_section('Change En Route', 'cr', \@cr_fields, '');
-
-# LT
-my @lt_fields = (
-    {name => 'Location',            size => 8},
-    {name => 'ScheduledArrival',    size => 5},
-    {name => 'PublicArrival',       size => 4},
-    {name => 'Platform',            size => 3},
-    {name => 'Path',                size => 3},
-    {name => 'Activity',            size => 12},
-    {name => 'Spare',               size => 43},
-);
-create_section('Terminating Location', 'lt', \@lt_fields, 'lt');
+for my $id (@ids) {
+    create_section($data{$id}{description}, $id, $data{$id}{fields}, $data{$id}{prefix});
+}
 
 # FOOTER
 print <<'VIM';
@@ -201,4 +118,103 @@ hi crEven   guibg=#FFFFCC
 
 let b:current_syntax = "cif"
 VIM
+
+__DATA__
+bs,bx,lo,li,cr,lt
+
+bs,Basic Schedule,bs
+TransactionType              1
+TrainUid                     6
+DateRunsFrom                 6
+DateRunsTo                   6
+DaysRun                      7
+BankHolidayRunning           1
+TrainStatus                  1
+TrainCategory                2
+TrainIdentity                4
+Headcode                     4
+CourseIndicator              1
+TrainServiceCode             8
+PortionId                    1
+PowerType                    3
+TimingLoad                   4
+Speed                        3
+OperatingCharacteristics     6
+TrainClass                   1
+Sleepers                     1
+Reservations                 1
+ConnectionIndicator          1
+CateringCode                 4
+ServiceBranding              4
+Spare                        1
+StpIndicator                 1
+
+bx,Basic Schedule Extra Detail,
+TractionClass                4
+UicCode                      5
+AtocCode                     2
+ApplicableTimetableCode      1
+ReservedFieldRsid            8
+ReservedFieldDataSource      1
+Spare                        57
+
+lo,Origin Location,lo
+Location                 8
+ScheduledDeparture       5
+PublicDeparture          4
+Platform                 3
+Line                     3
+EngineeringAllowance     2
+PathingAllowance         2
+Activity                 12
+PerformanceAllowance     2
+Spare                    37
+
+li,Intermediate Location,
+Location                 8
+ScheduledArrival         5
+ScheduledDeparture       5
+ScheduledPass            5
+PublicArrival            4
+PublicDeparture          4
+Platform                 3
+Line                     3
+Path                     3
+Activity                 12
+EngineeringAllowance     2
+PathingAllowance         2
+PerformanceAllowance     2
+Spare                    20
+
+cr,Change En Route,
+Location                     8
+TrainCategory                2
+TrainIdentity                4
+Headcode                     4
+CourseIndicator              1
+TrainServiceCode             8
+PortionId                    1
+PowerType                    3
+TimingLoad                   4
+Speed                        3
+OperatingCharacteristics     6
+TrainClass                   1
+Sleepers                     1
+Reservations                 1
+ConnectionIndicator          1
+CateringCode                 4
+ServiceBranding              4
+TractionClass                4
+UicCode                      5
+ReservedFieldRsid            8
+Spare                        5
+
+lt,Terminating Location,lt
+Location             8
+ScheduledArrival     5
+PublicArrival        4
+Platform             3
+Path                 3
+Activity             12
+Spare                43
 
