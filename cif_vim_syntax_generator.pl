@@ -23,11 +23,11 @@ sub create_syntax {
 }
 
 sub create_links {
-    my ($identity, $names, $highlight_prefix) = @_;
-    hi_link(element($identity, 'RecordIdentity'), 'odd');
+    my ($identity, $names, $prefix) = @_;
+    hi_link(element($identity, 'RecordIdentity'), highlight($prefix, 'odd'));
     my $odd_even = 'even';
     for my $i (0 .. $#$names) {
-        hi_link($identity, $$names[$i]);
+        hi_link(element($identity, $$names[$i]), highlight($prefix, $odd_even));
         $odd_even = $odd_even eq 'odd' ? 'even' : 'odd';
     }
     print "\n";
