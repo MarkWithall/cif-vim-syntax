@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:     CIF
 " Maintainer:   Mark Withall <mark.withall@tracsis.com>
-" Last Change:  Thu Jul 30 11:04:33 2015
+" Last Change:  Thu Jul 30 13:25:52 2015
 
 " Quit when a (custom) syntax file was already loaded
 if exists("b:current_syntax")
