@@ -353,15 +353,15 @@ hi link cifZzRecordIdentity odd
 hi link cifZzSpare even
 
 " Colouring
-hi odd      guibg=#EEEEEE
+hi odd      guibg=#EEEEEE ctermbg=darkgrey   ctermfg=white
 hi even     guibg=#CCCCCC
-hi bsOdd    guibg=#EEEEFF
+hi bsOdd    guibg=#EEEEFF ctermbg=blue       ctermfg=white
 hi bsEven   guibg=#CCCCFF
-hi loOdd    guibg=#EEFFEE
+hi loOdd    guibg=#EEFFEE ctermbg=darkgreen  ctermfg=white
 hi loEven   guibg=#CCFFCC
-hi ltOdd    guibg=#FFEEEE
+hi ltOdd    guibg=#FFEEEE ctermbg=darkred    ctermfg=white
 hi ltEven   guibg=#FFCCCC
-hi crOdd    guibg=#FFFFEE
+hi crOdd    guibg=#FFFFEE ctermbg=darkyellow ctermfg=white
 hi crEven   guibg=#FFFFCC
 
 let b:current_syntax = "cif"
