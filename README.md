@@ -1,13 +1,17 @@
 CIF Syntax File For vim/gvim
-==============
+===
 
 A vim/gvim syntax highlighting for CIF timetable files.
 
 ![](CIFVimSyntax.png)
 
-To install it:
+Installation
+---
 
-* Copy the `syntax` and `ftdetect` folders to `$HOME/.vim` (on unix-like systems) or `$HOME\vimfiles` on Windows
+Copy the `syntax` and `ftdetect` folders to `$HOME/.vim` (on unix-like systems) or `$HOME\vimfiles` on Windows.
+
+AOB
+---
 
 For further information on the CIF file format, see [ATOC's spec](http://www.atoc.org/clientfiles/File/RSPS5004%20v27.pdf).
 
