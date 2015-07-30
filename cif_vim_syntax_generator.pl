@@ -81,12 +81,15 @@ sub highlight {
     return ($prefix eq '') ? $oddEven : $prefix . ucfirst($oddEven);
 }
 
+my $lastchange = scalar localtime();
+my $maintainer = 'Mark Withall <mark.withall@tracsis.com>';
+
 # HEADER
-print <<'VIM';
+print <<VIM;
 " Vim syntax file
 " Language:     CIF
-" Maintainer:   Mark Withall <mark.withall@tracsis.com>
-" Last Change:  2013 Apr 11
+" Maintainer:   $maintainer
+" Last Change:  $lastchange
 
 " Quit when a (custom) syntax file was already loaded
 if exists("b:current_syntax")
