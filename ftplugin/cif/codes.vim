@@ -60,7 +60,7 @@ function! ShowCodes(codes)
             if has_key(activities, code)
                 echo code . ':' . activities[code]
             else
-                echo code . ':' . 'UKNOWN'
+                echo code . ':' . 'UNKNOWN'
             endif
         endif
     endfor
