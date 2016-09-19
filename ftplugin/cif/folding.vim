@@ -1,4 +1,5 @@
-function! CifFolds()                                                                                                     let record_type = getline(v:lnum)[0:1]
+function! CifFolds()
+    let record_type = getline(v:lnum)[0:1]
     if record_type ==# 'BS'
         return ">1"
     endif
